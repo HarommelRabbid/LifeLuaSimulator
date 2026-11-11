@@ -1,6 +1,8 @@
 #include "lj_lifeinit.h"
 
 static int draw_swapbuffers(lua_State *L) {
+    SDL_Rect clip_rect = { 0, 0, 960, 544 };
+    SDL_SetRenderClipRect(renderer, &clip_rect);
     SDL_RenderPresent(renderer);
 
     SDL_Event event;
@@ -13,6 +15,7 @@ static int draw_swapbuffers(lua_State *L) {
         SDL_SetRenderDrawColor(renderer, color->r, color->g, color->b, color->a);
     }else SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    SDL_SetRenderClipRect(renderer, NULL);
     return 0;
 }
 
