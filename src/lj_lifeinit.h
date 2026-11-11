@@ -31,3 +31,4 @@ LUALIB_API int luaL_extendos(lua_State *L);
 LUALIB_API int luaL_opencolor(lua_State *L);
 LUALIB_API int luaL_opencontrols(lua_State *L);
 LUALIB_API int luaL_openimage(lua_State *L);
+LUALIB_API int luaL_opentimer(lua_State *L);

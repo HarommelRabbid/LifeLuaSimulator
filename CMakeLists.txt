@@ -32,6 +32,7 @@ set(SOURCES
     src/lj_lifecolor.c
     src/lj_lifecontrols.c
     src/lj_lifeimage.c
+    src/lj_lifetimer.c
 )
 
 add_executable(LifeLuaSimulator ${SOURCES})

@@ -53,7 +53,7 @@ static const luaL_Reg image_meta[] = {
     {NULL, NULL}
 };
 
-LUALIB_API int luaL_openimage(lua_State *L){
+LUALIB_API int luaL_openimage(lua_State *L) {
     luaL_newmetatable(L, "image");
     lua_pushstring(L, "__index");
     lua_pushvalue(L, -2);  /* pushes the metatable */

@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
     luaL_opencontrols(L);
     luaL_extendos(L);
     luaL_openimage(L);
+    luaL_opentimer(L);
 
     const char *script_path = "main.lua";
     if(argc > 1) script_path = argv[1];
