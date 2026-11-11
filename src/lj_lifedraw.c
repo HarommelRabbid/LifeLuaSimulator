@@ -73,11 +73,68 @@ static int draw_pixel(lua_State *L){
     return 0;
 }
 
+int
+SDL_RenderFillCircle(SDL_Renderer * renderer, float x, float y, float radius)
+{
+    int offsetx, offsety, d;
+    int status;
+
+    offsetx = 0;
+    offsety = radius;
+    d = radius -1;
+    status = 0;
+
+    while (offsety >= offsetx) {
+
+        status += SDL_RenderLine(renderer, x - offsety, y + offsetx,
+                                     x + offsety, y + offsetx);
+        status += SDL_RenderLine(renderer, x - offsetx, y + offsety,
+                                     x + offsetx, y + offsety);
+        status += SDL_RenderLine(renderer, x - offsetx, y - offsety,
+                                     x + offsetx, y - offsety);
+        status += SDL_RenderLine(renderer, x - offsety, y - offsetx,
+                                     x + offsety, y - offsetx);
+
+        if (status < 0) {
+            status = -1;
+            break;
+        }
+
+        if (d >= 2*offsetx) {
+            d -= 2*offsetx + 1;
+            offsetx +=1;
+        }
+        else if (d < 2 * (radius - offsety)) {
+            d += 2 * offsety - 1;
+            offsety -= 1;
+        }
+        else {
+            d += 2 * (offsety - offsetx - 1);
+            offsety -= 1;
+            offsetx += 1;
+        }
+    }
+
+    return status;
+}
+
+static int draw_circle(lua_State *L){
+    float x = (float)luaL_checknumber(L, 1);
+    float y = (float)luaL_checknumber(L, 2);
+    float radius = (float)luaL_checknumber(L, 3);
+    Color *color = lua_tocolor(L, 4);
+    SDL_SetRenderDrawColor(renderer, color->r, color->g, color->b, color->a);
+
+    SDL_RenderFillCircle(renderer, x, y, radius);
+    return 0;
+}
+
 static const luaL_Reg draw_lib[] = {
     {"text", draw_text},
     {"rect", draw_rect},
     {"line", draw_line},
     {"pixel", draw_pixel},
+    {"circle", draw_circle},
     {"swapbuffers", draw_swapbuffers},
     {NULL, NULL}
 };

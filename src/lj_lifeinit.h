@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
@@ -22,3 +25,4 @@ LUALIB_API int luaL_opendraw(lua_State *L);
 LUALIB_API int luaL_extendos(lua_State *L);
 LUALIB_API int luaL_opencolor(lua_State *L);
 LUALIB_API int luaL_opencontrols(lua_State *L);
+LUALIB_API int luaL_openimage(lua_State *L);

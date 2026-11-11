@@ -42,12 +42,13 @@ int main(int argc, char *argv[]) {
     SDL_SetRenderLogicalPresentation(renderer, 960, 544, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
     lua_State *L = luaL_newstate();
+    lua_pushstring(L, LL_VERSION); lua_setglobal(L, "LL_VERSION");
     luaL_openlibs(L);
     luaL_opencolor(L);
     luaL_opendraw(L);
     luaL_opencontrols(L);
     luaL_extendos(L);
-    lua_pushstring(L, LL_VERSION); lua_setglobal(L, "LL_VERSION");
+    luaL_openimage(L);
 
     const char *script_path = "main.lua";
     if(argc > 1) script_path = argv[1];
