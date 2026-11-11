@@ -1,6 +1,4 @@
 #include "lj_lifeinit.h"
-#include <SDL3/SDL.h>
-#include <stdbool.h>
 
 static bool current_keys[SDL_SCANCODE_COUNT] = {false};
 static bool previous_keys[SDL_SCANCODE_COUNT] = {false};
@@ -62,24 +60,60 @@ static int controls_released(lua_State *L) {
     return 1;
 }
 
+static int controls_fronttouch(lua_State *L){
+    lua_newtable(L);
+
+    float x, y;
+    SDL_MouseButtonFlags buttons = SDL_GetMouseState(&x, &y);
+
+    if(buttons & SDL_BUTTON_LMASK){
+        lua_newtable(L);
+        lua_pushnumber(L, x); lua_setfield(L, -2, "x");
+        lua_pushnumber(L, y); lua_setfield(L, -2, "y");
+
+        lua_rawseti(L, -2, 1);
+    }
+    return 1;
+}
+
+static int controls_reartouch(lua_State *L){
+    lua_newtable(L);
+
+    float x, y;
+    SDL_MouseButtonFlags buttons = SDL_GetMouseState(&x, &y);
+
+    if(buttons & SDL_BUTTON_RMASK){
+        lua_newtable(L);
+        lua_pushnumber(L, x); lua_setfield(L, -2, "x");
+        lua_pushnumber(L, y); lua_setfield(L, -2, "y");
+
+        lua_rawseti(L, -2, 1);
+    }
+    return 1;
+}
+
 static const luaL_Reg controls_lib[] = {
     {"update", controls_update},
     {"held", controls_held},
     {"pressed", controls_pressed},
     {"released", controls_released},
+    {"fronttouch", controls_fronttouch},
+    {"reartouch", controls_reartouch},
     {NULL, NULL}
 };
 
 LUALIB_API int luaL_opencontrols(lua_State *L) {
     luaL_register(L, "controls", controls_lib);
 
-    lua_pushinteger(L, SDLK_LEFT);   lua_setglobal(L, "SDLK_LEFT");
-    lua_pushinteger(L, SDLK_RIGHT);  lua_setglobal(L, "SDLK_RIGHT");
-    lua_pushinteger(L, SDLK_UP);     lua_setglobal(L, "SDLK_UP");
-    lua_pushinteger(L, SDLK_DOWN);   lua_setglobal(L, "SDLK_DOWN");
-    lua_pushinteger(L, SDLK_SPACE);  lua_setglobal(L, "SDLK_SPACE");
-    lua_pushinteger(L, SDLK_RETURN); lua_setglobal(L, "SDLK_RETURN");
-    lua_pushinteger(L, SDLK_ESCAPE); lua_setglobal(L, "SDLK_ESCAPE");
+    luaL_pushglobalint_as(L, SDLK_LEFT, "SCE_CTRL_LEFT");
+    luaL_pushglobalint_as(L, SDLK_RIGHT, "SCE_CTRL_RIGHT");
+    luaL_pushglobalint_as(L, SDLK_UP, "SCE_CTRL_UP");
+    luaL_pushglobalint_as(L, SDLK_DOWN, "SCE_CTRL_DOWN");
+    luaL_pushglobalint_as(L, SDLK_BACKSPACE, "SCE_CTRL_CIRCLE");
+    luaL_pushglobalint_as(L, SDLK_RETURN, "SCE_CTRL_CROSS");
+    luaL_pushglobalint_as(L, SDLK_ESCAPE, "SCE_CTRL_START");
+    luaL_pushglobalint_as(L, SDLK_W, "SCE_CTRL_TRIANGLE");
+    luaL_pushglobalint_as(L, SDLK_S, "SCE_CTRL_SQUARE");
 
     return 1;
 }

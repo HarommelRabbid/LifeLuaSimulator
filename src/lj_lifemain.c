@@ -6,21 +6,21 @@ SDL_Renderer *renderer = NULL;
 void luaL_lifelua_dofile(lua_State *L, const char *script_path){
     if (luaL_loadfile(L, script_path) || lua_pcall(L, 0, 0, 0) != LUA_OK) {
         const char *error = lua_tostring(L, -1) != NULL ? lua_tostring(L, -1) : "Unknown error";
-        SDL_MessageBoxData *msgbox;
-        msgbox->flags = SDL_MESSAGEBOX_ERROR | SDL_MESSAGEBOX_BUTTONS_LEFT_TO_RIGHT;
-        msgbox->title = "LifeLua Error";
-        msgbox->message = error;
-        msgbox->numbuttons = 2;
-        msgbox->colorScheme = NULL;
+        SDL_MessageBoxData msgbox;
+        msgbox.flags = SDL_MESSAGEBOX_ERROR | SDL_MESSAGEBOX_BUTTONS_LEFT_TO_RIGHT;
+        msgbox.title = "LifeLua Error";
+        msgbox.message = error;
+        msgbox.numbuttons = 2;
+        msgbox.colorScheme = NULL;
         SDL_MessageBoxButtonData button_data[3] = {
             {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Close"},
             {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Retry"},
             {0, 0, NULL}
         };
-        msgbox->buttons = button_data;
-        msgbox->window = window;
+        msgbox.buttons = button_data;
+        msgbox.window = window;
         int retid;
-        SDL_ShowMessageBox(msgbox, &retid);
+        SDL_ShowMessageBox(&msgbox, &retid);
         exit(1);
     }
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -11,6 +13,9 @@
 #include <SDL3/SDL_main.h>
 
 #define LL_VERSION "26-11-10"
+#define luaL_pushglobalint(L, value) lua_pushinteger(L, value); lua_setglobal(L, #value);
+#define luaL_pushglobalint_as(L, value, var) lua_pushinteger(L, value); lua_setglobal(L, var);
+#define luaL_pushglobalint_alsoas(L, value, var) luaL_pushglobalint(L, value); luaL_pushglobalint_as(L, value, var);
 
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
